@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -32,6 +33,8 @@ fun CityListScreen(
     cities: List<City>,
     onAddCity: (City) -> Unit,
     onUpdateCity: (City, City) -> Unit,
+    // on delete
+    onDeleteCity: (City) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var newCityName by remember { mutableStateOf("") }
@@ -128,8 +131,10 @@ fun CityListScreen(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
+
+            Column {
                 Button(
-                    modifier = Modifier.padding(vertical = 12.dp),
+                    modifier = Modifier.padding(vertical = 0.dp),
                     onClick = {
                         val cityToUpdate = selectedCity
                         if (
@@ -153,6 +158,33 @@ fun CityListScreen(
                 ) {
                     Text("UPDATE CITY")
                 }
+
+
+                Spacer(modifier = Modifier.height(2.dp))
+
+                Button(
+                    onClick = {
+                        val theCityToDelete = selectedCity
+
+                        if(theCityToDelete != null) {
+
+                            onDeleteCity(theCityToDelete)
+
+
+                            // since that city doesnt exist
+                            // then we shouldnt be able to select it
+                            selectedCity = null
+
+
+
+                        }
+
+
+                    }) { Text("DELETE CITY") }
+
+            }
+
+
             }
         }
         LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -213,7 +245,8 @@ fun CityListScreenPreview() {
                 City("Calgary", "AB")
             ),
             onAddCity = {},
-            onUpdateCity = { _, _ -> }
+            onUpdateCity = { _, _ -> },
+            onDeleteCity = {}
         )
     }
 }
